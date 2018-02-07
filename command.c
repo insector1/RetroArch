@@ -245,6 +245,7 @@ bool command_set_shader(const char *arg)
          msg_hash_to_str(MSG_APPLYING_SHADER),
          arg);
 
+   retroarch_set_shader_preset(arg);
    return video_driver_set_shader(type, arg);
 }
 
@@ -1295,31 +1296,13 @@ static void command_event_disable_overrides(void)
       return;
 
    /* reload the original config */
-
    config_unload_override();
    rarch_ctl(RARCH_CTL_UNSET_OVERRIDES_ACTIVE, NULL);
 }
 
 static void command_event_restore_default_shader_preset(void)
 {
-   if (!path_is_empty(RARCH_PATH_DEFAULT_SHADER_PRESET))
-   {
-      /* auto shader preset: reload the original shader */
-      settings_t *settings      = config_get_ptr();
-      const char *shader_preset = path_get(RARCH_PATH_DEFAULT_SHADER_PRESET);
-
-      if (!string_is_empty(shader_preset))
-      {
-         RARCH_LOG("%s %s\n",
-               msg_hash_to_str(MSG_RESTORING_DEFAULT_SHADER_PRESET_TO),
-               shader_preset);
-         strlcpy(settings->paths.path_shader,
-               shader_preset,
-               sizeof(settings->paths.path_shader));
-      }
-   }
-
-   path_clear(RARCH_PATH_DEFAULT_SHADER_PRESET);
+   retroarch_unset_shader_preset();
 }
 
 static void command_event_restore_remaps(void)

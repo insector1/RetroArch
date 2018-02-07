@@ -30,6 +30,7 @@
 #include "../file_path_special.h"
 #include "../configuration.h"
 #include "../paths.h"
+#include "../retroarch.h"
 #include "../verbosity.h"
 
 #ifdef HAVE_SHADER_MANAGER
@@ -130,14 +131,14 @@ bool menu_shader_manager_init(void)
 #ifdef HAVE_SHADER_MANAGER
    settings_t *settings        = config_get_ptr();
    const char *config_path     = path_get(RARCH_PATH_CONFIG);
-   const char *path_shader     = settings->paths.path_shader;
+   const char *path_shader     = retroarch_get_shader_preset();
 
    menu_shader_manager_free();
 
    menu_driver_shader          = (struct video_shader*)
       calloc(1, sizeof(struct video_shader));
 
-   if (!menu_driver_shader)
+   if (!menu_driver_shader || !path_shader)
       return false;
 
    /* In a multi-config setting, we can't have
