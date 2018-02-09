@@ -1302,7 +1302,7 @@ static void android_input_poll(void *data)
 
    while ((ident =
             ALooper_pollAll((android_input_key_pressed(data, key))
-               ? -1 : 0,
+               ? -1 : 1,
                NULL, NULL, NULL)) >= 0)
    {
       switch (ident)
